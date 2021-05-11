@@ -7,7 +7,6 @@ from json import dumps
 from config import config
 from slack_sdk.webhook import WebhookClient
 
-
 from selenium import webdriver
 
 
@@ -20,12 +19,13 @@ def test_request2(p_time):
     time.sleep(3)
     for i in range(p_time):
         driver.refresh()
+        time.sleep(3)
         driver.find_element_by_xpath('//a[@href="#raw"]').click()
         raw_element = driver.find_element_by_id('thing-data-raw')
         y = json.loads(raw_element.text)
         test_save('temperature', y['temperature'])
         test_save('humidity', y['humidity'])
-        time.sleep(1)
+        time.sleep(55)
 
 ## Guardar BD
 def test_save(type_weather, value_number):
