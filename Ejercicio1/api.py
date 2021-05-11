@@ -1,65 +1,48 @@
-
-from config import config
-from consumir import test
+from consumir import test_get_data, test_request
 from json import dumps
 from httplib2 import Http
-import psycopg2
+from slack_sdk.webhook import WebhookClient
 import flask
 
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
-def get_data():
-    conexion = None
-    records = None
-    try:
-        # Read Config
-        params = config()
-
-        # Connect wirh params
-        conexion = psycopg2.connect(**params)
-
-        # Cur creation
-        cur = conexion.cursor()
-
-        # Select of information
-        cur.execute("Select * from test")
-
-        records = cur.fetchall()
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
-    finally:
-        if conexion is not None:
-            conexion.close()
-            print('Conexión finalizada.')
-    return records
 
 @app.route('/', methods=['GET'])
 def home():
     
-    records = get_data()
-    print("Print each row and it's columns values")
-    for row in records:
-        print('Rodney*****************************+')
-        print("Id = ", row[0], )
-        print("Model = ", row[1])
-        print("Price  = ", row[2], "\n")
-    
+    # coins to search
+    coins = ['EUR', 'CLP', 'PEN']
+    # Request Yahoo! and Save
+    test_request(coins)
+
+    # Catch Data of BD
+    records = test_get_data()
+
+    # Service webhook
     url = 'https://webhook.site/8bea820e-bbdd-4486-b606-fb1963e066d2'
-    bot_message = {
-        'text' : 'Hello from a Python script!'}
+    messages =  []
+    for row in records:
+        messages.append({
+            'CoinDollar': row[3],
+            'date': str(row[2]),
+            'Change_value': str(row[1])
+        })
 
     message_headers = {'Content-Type': 'application/json; charset=UTF-8'}
-    http_obj = Http()
+    webhook = WebhookClient(url)
+
+    response = webhook.send(text=dumps(messages))
+    '''http_obj = Http()
     response = http_obj.request(
         uri=url,
         method='POST',
         headers=message_headers,
-        body=dumps(bot_message),
-    )
+        body=dumps(messages),
+    )'''
 
     print(response)
-    return "Hola"
+    return dumps(messages)
 
 app.run()

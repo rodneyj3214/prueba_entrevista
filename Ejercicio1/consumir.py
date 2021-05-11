@@ -13,13 +13,13 @@ import requests
 def test_request(coins):
     # record of coins
     for i in coins:
-
+        print('*****CONSULTANDO  Yahoo Page y guardando BD*****')
         url = 'https://finance.yahoo.com/quote/'+i+'USD%3DX/history?p='+i+'USD%3DX'# URL for coin
 
         response = requests.get(url)
         print('*********'+i+'************')
         if response.status_code == 200:
-            
+            print('success Yahoo Page\n')
             # soup of request Test
             soup = bs4.BeautifulSoup(response.text, 'html.parser')
             
@@ -33,12 +33,11 @@ def test_request(coins):
                 # Fromat date for 
                 date = datetime.strptime(str_date, '%b %d, %Y')
                 
-                print(str(date) + ' - ' + chage_value)
+                ## GUARDAR REGISTROS
                 test_save(date, chage_value, i)
 
 ## Guardar BD
 def test_save(date, change_value, coin):
-    """ Conexión al servidor de pases de datos PostgreSQL """
     conexion = None
     try:
         # Lectura de los parámetros de conexion
@@ -61,10 +60,31 @@ def test_save(date, change_value, coin):
     finally:
         if conexion is not None:
             conexion.close()
-            print('Conexión finalizada.')
+# Catch the bd info
 
-def test():
-    return "Rodney"
+def test_get_data():
+    conexion = None
+    records = None
+    try:
+        # Read Config
+        params = config()
+
+        # Connect wirh params
+        conexion = psycopg2.connect(**params)
+
+        # Cur creation
+        cur = conexion.cursor()
+
+        # Select of information
+        cur.execute("Select * from test order by name_coin")
+
+        records = cur.fetchall()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conexion is not None:
+            conexion.close()
+    return records
 
 if __name__ == '__main__':
     # coins to search
