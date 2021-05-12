@@ -13,6 +13,8 @@ from selenium import webdriver
 def test_request2(p_time):
     options = webdriver.ChromeOptions()
     options.add_argument('--incognito')
+    options.add_argument('--headless')
+    options.add_argument('--disable-gpu')
     driver = webdriver.Chrome(executable_path='./chromedriver', options=options)
     url = 'https://dweet.io/follow/thecore'
     driver.get(url)
