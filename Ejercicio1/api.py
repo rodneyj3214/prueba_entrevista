@@ -1,6 +1,5 @@
 from consumir import test_get_data, test_request
 from json import dumps
-from httplib2 import Http
 from slack_sdk.webhook import WebhookClient
 import flask
 
@@ -34,13 +33,6 @@ def home():
     webhook = WebhookClient(url)
 
     response = webhook.send(text=dumps(messages))
-    '''http_obj = Http()
-    response = http_obj.request(
-        uri=url,
-        method='POST',
-        headers=message_headers,
-        body=dumps(messages),
-    )'''
 
     print(response)
     return dumps(messages)

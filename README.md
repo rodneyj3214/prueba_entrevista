@@ -1,5 +1,20 @@
 # prueba_entrevista
 
+## Instalación por cada ejercicio.
+- Creación de entorno virtual
+```sh
+python3 -m venv venv
+```
+- Ingresar a entorno virtual
+```sh
+source venv/bin/activate
+```
+- Instalación de requerimientos
+```sh
+pip3 install wheel
+pip3 install -r requirements.txt
+```
+
 ## EJERCICIO 1.
 1. Consultar el valor de cambio de una de las siguientes opciones en 5 días diferentes de la
 siguiente página https://finance.yahoo.com/:
@@ -30,6 +45,11 @@ incluya todos los valores almacenados en la base de datos
 - Ejecutar  el script para crear BD de postgres en el archivo `init.sql`
 - Configurar Usuario y contraseña de BD en el archivo `bd_properties.conf` .  Dar permisos necesarios a este archivo para poder ser leido por el programa.
 - Ejecutar el archivo `consumo.py` el cual abrira un navegador Chrome de la version `90.0.4430.^` refrescará el navegador cada minuto durante 15 minutos  y guardara su información en una BD , al finalizar golpeara un webhook con la información recaudada.
+- Revisar la version de su navegador con el siguiente comando:
+```sh
+google-chrome --product-version
+```
+*Nota:* Descargar el chromedriver para su versión en https://sites.google.com/a/chromium.org/chromedriver/downloads
 
 ## LAMBDA EJERCICIO 2.
 1. Desarrollar una función Lambda que consulte a la página https://dweet.io/follow/thecore los

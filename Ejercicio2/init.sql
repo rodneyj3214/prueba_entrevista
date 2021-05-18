@@ -3,12 +3,13 @@ create sequence sec_weather
   	increment by 1
 	maxvalue 99999
 	minvalue 1;
---select * from weather
-drop table weather
+-- Table: public.weather
+
+-- DROP TABLE public.weather;
 CREATE TABLE weather
 (
     id bigint NOT NULL DEFAULT nextval('sec_test'::regclass),
-	type_weather numeric NOT NULL,
+    type_weather character varying NOT NULL,
     date_at timestamp(0) without time zone DEFAULT NOW(),
 	value_number numeric,
     CONSTRAINT weather_pkey PRIMARY KEY (id)
